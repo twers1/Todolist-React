@@ -11,6 +11,7 @@ type TaskType = {
 type PropsType = {
     title:string 
     tasks: Array<TaskType>
+    removeTask: Function
     // tasks2: TaskType[] эти две записи одинаковы
 }
 // map - это метод массива, который на основе каждого объекта в массиве(элемента в) -> создает какое-то другой элемент 
@@ -27,7 +28,7 @@ function TodoList(props: PropsType) {
           props.tasks.map((t) => { return <li> 
             <input type="checkbox" checked={t.isDone} />
             <span>{t.title}</span>
-            <button onClick={() => {alert(t.id)}}>x</button>
+            <button onClick={() => {props.removeTask(t.id)}}>x</button>
           </li>})
         }
        
