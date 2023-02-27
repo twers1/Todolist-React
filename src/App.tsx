@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import TodoList from './components/TodoList/Todolist';
+import TodoList, { TaskType } from './components/TodoList/Todolist';
 
 // function useState2(data: any) {
 //   return [data, () => {}]
@@ -23,7 +23,7 @@ export type FiltedValuesType = "all" | "completed" | "active"
 function App() {
 
 // useState - это hook, который хранит данные и изменяет их
-  let [task1, setTask1] = useState([
+  let [task1, setTask1] = useState<Array<TaskType>>([
     {id: 1, title: "CSS", isDone: true},
     {id: 2, title: "JS", isDone: true},
     {id: 3, title: "React", isDone: true},
@@ -35,6 +35,10 @@ function App() {
   function removeTask(id: number) {
     let filteredTask1 = task1.filter((t) =>t.id !== id)
     setTask1(filteredTask1)
+  }
+
+  function changeFilter(value: FiltedValuesType) {
+    setFilter(value);
   }
 
   let tasksForTodoList = task1;
@@ -50,6 +54,7 @@ function App() {
       <TodoList title="What to learn"
        tasks={tasksForTodoList}
        removeTask={removeTask}
+       changeFilter={changeFilter}
        /> 
       
     </div>
