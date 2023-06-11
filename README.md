@@ -1,3 +1,6 @@
 # Todo List on React(typescript) 
 
-Idea in []()
+Тестовое задание Frontend intern в Mindbox 
+
+
+
