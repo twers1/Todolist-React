@@ -19,7 +19,7 @@ npm start - start in your computer
 
 ## Demo 
 
-![]()
+![](https://github.com/twers1/Todolist-React/blob/main/demo.gif)
 
 ## Как запустить приложение 
 
@@ -40,7 +40,7 @@ npm start - запускает на ваш компьютер данное пр�
 
 ## Демонстрация: 
 
-![]()
+![](https://github.com/twers1/Todolist-React/blob/main/demo.gif)
 
 
 
