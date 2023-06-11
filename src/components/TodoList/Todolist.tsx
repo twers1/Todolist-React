@@ -1,5 +1,7 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 import { FiltedValuesType } from "../../App";
+import AddItemForm from "../AddItemForm";
+import EditatableSpan from "../EditableSpan";
 
 // props(объект) - параметры функции props = {title: "", tasks={}}
 
@@ -9,7 +11,7 @@ export type TaskType = {
     isDone: boolean
 }
 
-type PropsType = {
+export type PropsType = {
     id: string
     title:string 
     tasks: Array<TaskType>
@@ -18,36 +20,13 @@ type PropsType = {
     changeFilter: (value: FiltedValuesType, todolistId: string) => void
     addTask: (title: string, todolistId:string) => void
     changeTaskStatus: (taskId: string, isDone: boolean, todolistId:string ) => void
+    changeTaskTitle: (id: string, newValue:string, todolistId: string) => void
+    changeTodoListTitle: (id: string, newTitle: string) => void
     filter: FiltedValuesType
     removeTodoList: (todolistId: string) => void
 }
 // map - это метод массива, который на основе каждого объекта в массиве(элемента в) -> создает какое-то другой элемент 
 function TodoList(props: PropsType) {
-  const [newTaskTitle, setNewTaskTitle] = useState("");
-  const [error, setError] = useState<string | null>(null)
-
-  const onNewTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewTaskTitle(e.currentTarget.value)
-  }
-  
-  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    setError(null)
-    if( e.charCode === 13){
-      props.addTask(newTaskTitle, props.id)
-      setNewTaskTitle("")
-    }
-    
-  }
-
-  const addTask = () => {
-    if(newTaskTitle.trim() === ""){
-      setError("Неверное поле")
-      return
-    }
-    props.addTask(newTaskTitle, props.id)
-    setNewTaskTitle("")
-  }
-
   const onAllClickHandler = () =>props.changeFilter("all", props.id)
 
   const onActiveClickHandler = () =>props.changeFilter("active", props.id)
@@ -57,17 +36,19 @@ function TodoList(props: PropsType) {
   const removeTodoList = () => {
     props.removeTodoList(props.id)
   }
+ 
+  const addTask = (title: string) => {
+    props.addTask(title, props.id)
+  }
 
+  const changeTodoListTitle = (newTitle:string) => {
+    props.changeTodoListTitle(props.id, newTitle)
+  }
 
   return (
     <div>
-      <h3>{props.title} <button onClick={removeTodoList}>x</button></h3>
-      <div>
-        <input value={newTaskTitle} onChange={onNewTitleChangeHandler} onKeyPress={onKeyPressHandler} className={error ? "error" : ""}/>
-        <button onClick={addTask}>+</button>
-        {error && <div className="error-message">error</div>}
-
-      </div>
+      <h3><EditatableSpan title={props.title} onChangeTitle={changeTodoListTitle}/><button onClick={removeTodoList}>x</button></h3>
+      <AddItemForm addItem={addTask}/>
       <ul>
         {
           props.tasks.map((t) => { return <li key={t.id} className={t.isDone ?"is-done" : ""}> 
@@ -76,7 +57,7 @@ function TodoList(props: PropsType) {
               props.changeTaskStatus(t.id, e.currentTarget.checked, props.id);
             }}
              checked={t.isDone} />
-            <span>{t.title}</span>
+            <EditatableSpan title={t.title} onChangeTitle={(newValue: string) => {props.changeTaskTitle(t.id, newValue, props.id)}}/>
             <button onClick={(e) => {props.removeTask(t.id, props.id)}}>x</button>
           </li>})
         }
@@ -91,5 +72,4 @@ function TodoList(props: PropsType) {
     </div>
   );
 }
-
 export default TodoList;
